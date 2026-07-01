@@ -1,0 +1,892 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Hardwood — Legends, Dynasties &amp; the Fundamentals</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Space+Mono:wght@400;700&family=Work+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --court-dark: #1B1410;
+    --court-dark-2: #241A12;
+    --hardwood: #C87F3D;
+    --hardwood-light: #EFDCC0;
+    --hardwood-lighter: #F7EFE2;
+    --paint-orange: #E2571C;
+    --scoreboard-red: #D62828;
+    --chalk: #F5EFE3;
+    --ink: #241A12;
+    --ink-soft: #4A3B2C;
+    --line: rgba(245,239,227,0.14);
+    --line-dark: rgba(36,26,18,0.14);
+  }
+
+  *{ box-sizing: border-box; margin:0; padding:0; }
+
+  html{ scroll-behavior: smooth; }
+
+  body{
+    font-family: 'Work Sans', sans-serif;
+    background: var(--hardwood-lighter);
+    color: var(--ink);
+    line-height: 1.5;
+  }
+
+  h1, h2, h3, .display{
+    font-family: 'Anton', sans-serif;
+    font-weight: 400;
+    letter-spacing: 0.01em;
+    text-transform: uppercase;
+  }
+
+  .mono{ font-family: 'Space Mono', monospace; }
+
+  a{ color: inherit; }
+
+  img, svg{ display:block; max-width:100%; }
+
+  :focus-visible{
+    outline: 3px solid var(--paint-orange);
+    outline-offset: 3px;
+  }
+
+  .wrap{
+    max-width: 1120px;
+    margin: 0 auto;
+    padding: 0 24px;
+  }
+
+  /* ---------- NAV / SCOREBOARD BAR ---------- */
+  .scorebar{
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    background: var(--court-dark);
+    border-bottom: 2px solid var(--paint-orange);
+  }
+  .scorebar-inner{
+    max-width: 1120px;
+    margin: 0 auto;
+    padding: 14px 24px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+  .scorebar .brand{
+    font-family:'Anton', sans-serif;
+    color: var(--chalk);
+    font-size: 1.15rem;
+    letter-spacing: 0.06em;
+    display:flex;
+    align-items:center;
+    gap:10px;
+  }
+  .scorebar .brand .dot{
+    width:10px;height:10px;border-radius:50%;
+    background: var(--scoreboard-red);
+    box-shadow: 0 0 8px var(--scoreboard-red);
+  }
+  .scorebar nav{
+    display:flex;
+    gap: 4px;
+    font-family:'Space Mono', monospace;
+    font-size: 0.72rem;
+    flex-wrap: wrap;
+  }
+  .scorebar nav a{
+    text-decoration:none;
+    color: var(--chalk);
+    padding: 7px 12px;
+    border: 1px solid var(--line);
+    letter-spacing: 0.08em;
+  }
+  .scorebar nav a:hover{
+    background: var(--paint-orange);
+    border-color: var(--paint-orange);
+    color: var(--court-dark);
+  }
+  .scorebar nav a span{ color: var(--paint-orange); }
+  .scorebar nav a:hover span{ color: var(--court-dark); }
+
+  /* ---------- HERO ---------- */
+  .hero{
+    background: var(--court-dark);
+    color: var(--chalk);
+    position: relative;
+    overflow: hidden;
+    padding: 72px 0 0;
+  }
+  .hero-inner{
+    max-width: 1120px;
+    margin: 0 auto;
+    padding: 0 24px 90px;
+    display:grid;
+    grid-template-columns: 1.3fr 1fr;
+    gap: 40px;
+    align-items: center;
+  }
+  .eyebrow-mono{
+    font-family:'Space Mono', monospace;
+    font-size: 0.75rem;
+    color: var(--paint-orange);
+    letter-spacing: 0.18em;
+    margin-bottom: 18px;
+    display:block;
+  }
+  .hero h1{
+    font-size: clamp(2.6rem, 6vw, 4.6rem);
+    line-height: 0.98;
+    color: var(--chalk);
+  }
+  .hero h1 em{
+    font-style: normal;
+    color: var(--paint-orange);
+  }
+  .hero p.lede{
+    margin-top: 20px;
+    max-width: 46ch;
+    color: rgba(245,239,227,0.78);
+    font-size: 1.05rem;
+  }
+  .hero .cta-row{
+    margin-top: 30px;
+    display:flex;
+    gap: 14px;
+    flex-wrap: wrap;
+  }
+  .btn{
+    font-family:'Space Mono', monospace;
+    font-size: 0.78rem;
+    letter-spacing: 0.06em;
+    text-decoration:none;
+    padding: 13px 20px;
+    border: 2px solid var(--paint-orange);
+    display:inline-block;
+    transition: all .15s ease;
+  }
+  .btn.solid{ background: var(--paint-orange); color: var(--court-dark); font-weight:700; }
+  .btn.solid:hover{ background: var(--chalk); border-color: var(--chalk); }
+  .btn.ghost{ color: var(--chalk); }
+  .btn.ghost:hover{ background: rgba(245,239,227,0.08); }
+
+  /* scoreboard panel */
+  .board{
+    background: var(--court-dark-2);
+    border: 1px solid var(--line);
+    padding: 22px;
+  }
+  .board-head{
+    display:flex;
+    justify-content:space-between;
+    font-family:'Space Mono', monospace;
+    font-size: 0.68rem;
+    letter-spacing: 0.12em;
+    color: rgba(245,239,227,0.55);
+    border-bottom: 1px dashed var(--line);
+    padding-bottom: 12px;
+    margin-bottom: 16px;
+  }
+  .board-row{
+    display:flex;
+    justify-content: space-between;
+    align-items: baseline;
+    padding: 9px 0;
+    border-bottom: 1px solid var(--line);
+  }
+  .board-row:last-child{ border-bottom: none; }
+  .board-row .label{
+    font-family:'Space Mono', monospace;
+    font-size: 0.78rem;
+    color: rgba(245,239,227,0.75);
+    letter-spacing: 0.04em;
+  }
+  .board-row .value{
+    font-family:'Space Mono', monospace;
+    font-weight: 700;
+    font-size: 1.5rem;
+    color: var(--scoreboard-red);
+    text-shadow: 0 0 12px rgba(214,40,40,0.55);
+  }
+
+  /* plank stripe footer of hero */
+  .planks{
+    height: 34px;
+    width: 100%;
+    background: repeating-linear-gradient(
+      90deg,
+      var(--hardwood) 0px, var(--hardwood) 78px,
+      #B96F30 78px, #B96F30 82px
+    );
+    border-top: 2px solid var(--paint-orange);
+  }
+
+  /* ---------- TICKER ---------- */
+  .ticker{
+    background: var(--paint-orange);
+    color: var(--court-dark);
+    overflow: hidden;
+    white-space: nowrap;
+    border-bottom: 2px solid var(--court-dark);
+  }
+  .ticker-track{
+    display: inline-block;
+    padding: 9px 0;
+    font-family:'Space Mono', monospace;
+    font-size: 0.78rem;
+    letter-spacing: 0.05em;
+    font-weight: 700;
+    animation: scroll-left 32s linear infinite;
+  }
+  .ticker-track span{ margin: 0 26px; }
+  @keyframes scroll-left{
+    from{ transform: translateX(0); }
+    to{ transform: translateX(-50%); }
+  }
+
+  /* ---------- SECTION SHELL ---------- */
+  section.block{ padding: 86px 0; }
+  .block.dark{ background: var(--court-dark); color: var(--chalk); }
+  .block.light{ background: var(--hardwood-lighter); color: var(--ink); }
+
+  .section-head{
+    display:flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    gap: 20px;
+    margin-bottom: 46px;
+    flex-wrap: wrap;
+    border-bottom: 3px solid var(--paint-orange);
+    padding-bottom: 18px;
+  }
+  .section-head .qtr{
+    font-family:'Space Mono', monospace;
+    font-size: 0.75rem;
+    letter-spacing: 0.14em;
+    opacity: 0.65;
+    display:block;
+    margin-bottom: 6px;
+  }
+  .section-head h2{ font-size: clamp(1.9rem, 4vw, 2.7rem); }
+  .section-head p{
+    max-width: 34ch;
+    font-size: 0.95rem;
+    opacity: 0.75;
+  }
+  .section-head .stat-key{
+    max-width: 100%;
+    width: 100%;
+    font-family:'Space Mono', monospace;
+    font-size: 0.75rem;
+    letter-spacing: 0.02em;
+    opacity: 0.6;
+    margin-top: -4px;
+  }
+  .section-head .stat-key strong{
+    color: var(--paint-orange);
+    opacity: 1;
+  }
+
+  /* ---------- PLAYER CARDS ---------- */
+  .card-grid{
+    display:grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 22px;
+  }
+  .player-card{
+    background: var(--court-dark);
+    color: var(--chalk);
+    border: 1px solid rgba(245,239,227,0.12);
+    display:flex;
+    flex-direction: column;
+    overflow:hidden;
+    transition: transform .18s ease, box-shadow .18s ease;
+  }
+  .player-card:hover{
+    transform: translateY(-5px);
+    box-shadow: 0 14px 30px rgba(0,0,0,0.35);
+  }
+  .player-top{
+    padding: 20px 20px 16px;
+    display:flex;
+    align-items:flex-start;
+    justify-content: space-between;
+    gap: 10px;
+    border-bottom: 3px solid var(--tag, var(--paint-orange));
+  }
+  .player-num{
+    font-family:'Anton', sans-serif;
+    font-size: 2.6rem;
+    line-height: 1;
+    color: var(--tag, var(--paint-orange));
+  }
+  .player-id h3{
+    font-size: 1.15rem;
+    letter-spacing: 0.02em;
+  }
+  .player-id .pos{
+    font-family:'Space Mono', monospace;
+    font-size: 0.72rem;
+    opacity: 0.6;
+    letter-spacing: 0.08em;
+  }
+  .boxscore{
+    padding: 16px 20px 20px;
+    display:grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+    font-family:'Space Mono', monospace;
+  }
+  .boxscore div{ text-align:center; }
+  .boxscore .n{
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: var(--tag, var(--paint-orange));
+  }
+  .boxscore .l{
+    font-size: 0.62rem;
+    opacity: 0.55;
+    letter-spacing: 0.08em;
+    margin-top: 3px;
+  }
+  .player-note{
+    padding: 0 20px 20px;
+    font-size: 0.85rem;
+    opacity: 0.78;
+  }
+
+  /* ---------- DYNASTY TIMELINE ---------- */
+  .timeline{
+    position: relative;
+    padding-left: 28px;
+  }
+  .timeline::before{
+    content:"";
+    position:absolute;
+    left: 6px;
+    top: 6px;
+    bottom: 6px;
+    width: 2px;
+    background: repeating-linear-gradient(
+      to bottom, var(--paint-orange) 0 8px, transparent 8px 16px
+    );
+  }
+  .era{
+    position: relative;
+    padding: 0 0 44px 30px;
+  }
+  .era:last-child{ padding-bottom: 0; }
+  .era::before{
+    content:"";
+    position:absolute;
+    left: -30px;
+    top: 4px;
+    width: 14px; height:14px;
+    border-radius: 50%;
+    background: var(--court-dark);
+    border: 3px solid var(--paint-orange);
+  }
+  .era-head{
+    display:flex;
+    align-items:center;
+    gap: 14px;
+    margin-bottom: 10px;
+    flex-wrap: wrap;
+  }
+  .badge{
+    width: 46px; height: 46px;
+    border-radius: 50%;
+    display:flex; align-items:center; justify-content:center;
+    font-family:'Space Mono', monospace;
+    font-weight: 700;
+    font-size: 0.78rem;
+    color: var(--chalk);
+    flex-shrink: 0;
+  }
+  .era-title{ display:flex; flex-direction:column; }
+  .era-title .years{
+    font-family:'Space Mono', monospace;
+    font-size: 0.72rem;
+    opacity: 0.55;
+    letter-spacing: 0.1em;
+  }
+  .era-title h3{ font-size: 1.4rem; }
+  .era p{ max-width: 62ch; opacity: 0.85; font-size: 0.95rem; }
+  .era .stat-line{
+    margin-top: 10px;
+    font-family:'Space Mono', monospace;
+    font-size: 0.78rem;
+    color: var(--paint-orange);
+    letter-spacing: 0.03em;
+  }
+
+  /* ---------- TRAINING DRILLS ---------- */
+  .drill-grid{
+    display:grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 22px;
+  }
+  .drill-card{
+    background: var(--court-dark);
+    color: var(--chalk);
+    padding: 26px 24px;
+    border-top: 4px solid var(--paint-orange);
+  }
+  .drill-icon{ margin-bottom: 16px; }
+  .drill-card h3{
+    font-size: 1.05rem;
+    letter-spacing: 0.02em;
+    margin-bottom: 10px;
+  }
+  .drill-card p{
+    font-size: 0.9rem;
+    opacity: 0.78;
+  }
+
+  /* ---------- FAST FACTS ---------- */
+  .fact-grid{
+    display:grid;
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: 1px;
+    background: var(--ink-soft);
+    border: 1px solid var(--ink-soft);
+  }
+  .fact-card{
+    background: var(--court-dark);
+    padding: 28px 24px;
+  }
+  .fact-num{
+    font-family:'Anton', sans-serif;
+    font-size: 2.4rem;
+    color: var(--paint-orange);
+    line-height: 1;
+    margin-bottom: 12px;
+  }
+  .fact-card p{
+    font-size: 0.88rem;
+    opacity: 0.8;
+    max-width: 40ch;
+  }
+
+  /* ---------- FOOTER ---------- */
+  footer{
+    background: var(--court-dark-2);
+    color: rgba(245,239,227,0.6);
+    padding: 40px 0;
+    font-family:'Space Mono', monospace;
+    font-size: 0.75rem;
+    text-align:center;
+    border-top: 2px solid var(--paint-orange);
+  }
+  footer .dot{ color: var(--paint-orange); }
+
+  @media (max-width: 760px){
+    .hero-inner{ grid-template-columns: 1fr; }
+    .scorebar-inner{ justify-content:center; text-align:center; }
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    html{ scroll-behavior: auto; }
+    .ticker-track{ animation: none; }
+    .player-card{ transition: none; }
+  }
+</style>
+</head>
+<body>
+
+  <div class="scorebar">
+    <div class="scorebar-inner">
+      <div class="brand"><span class="dot"></span> THE HARDWOOD</div>
+      <nav>
+        <a href="#legends"><span>Q1</span> · LEGENDS</a>
+        <a href="#dynasties"><span>Q2</span> · DYNASTIES</a>
+        <a href="#training"><span>Q3</span> · TRAINING</a>
+        <a href="#facts"><span>Q4</span> · FAST FACTS</a>
+      </nav>
+    </div>
+  </div>
+
+  <header class="hero">
+    <div class="hero-inner">
+      <div>
+        <span class="eyebrow-mono">A COURTSIDE PRIMER</span>
+        <h1>Stats, dynasties<br>&amp; the <em>fundamentals</em></h1>
+        <p class="lede">A quick tour of the players who rewrote the box score, the teams that turned dominance into an era, and the drills that build a game from the ground up.</p>
+      </div>
+      <div class="board">
+        <div class="board-head"><span>CAREER POINTS PER GAME</span><span>LIVE LEADERBOARD</span></div>
+        <div class="board-row"><span class="label">M. JORDAN</span><span class="value">30.1</span></div>
+        <div class="board-row"><span class="label">W. CHAMBERLAIN</span><span class="value">30.1</span></div>
+        <div class="board-row"><span class="label">L. JAMES</span><span class="value">27.1</span></div>
+        <div class="board-row"><span class="label">E. BAYLOR</span><span class="value">27.4</span></div>
+      </div>
+    </div>
+    <div class="planks"></div>
+  </header>
+
+  <div class="ticker" aria-hidden="true">
+    <div class="ticker-track">
+      <span>1995–96 BULLS · 72–10 REGULAR SEASON</span>
+      <span>2015–16 WARRIORS · 73–9 REGULAR SEASON</span>
+      <span>K. ABDUL-JABBAR · 6× MVP</span>
+      <span>S. CURRY · ALL-TIME 3PT LEADER</span>
+      <span>SHOWTIME LAKERS · 5 TITLES IN THE 1980s</span>
+      <span>SPURS · 5 TITLES, 1999–2014</span>
+      <span>1995–96 BULLS · 72–10 REGULAR SEASON</span>
+      <span>2015–16 WARRIORS · 73–9 REGULAR SEASON</span>
+      <span>K. ABDUL-JABBAR · 6× MVP</span>
+      <span>S. CURRY · ALL-TIME 3PT LEADER</span>
+      <span>SHOWTIME LAKERS · 5 TITLES IN THE 1980s</span>
+      <span>SPURS · 5 TITLES, 1999–2014</span>
+    </div>
+  </div>
+
+  <!-- ================= LEGENDS ================= -->
+  <section class="block light" id="legends">
+    <div class="wrap">
+      <div class="section-head">
+        <div>
+          <span class="qtr">QTR 1 / 04</span>
+          <h2>Famous players &amp; their stats</h2>
+        </div>
+        <p>Career averages and headline numbers for eight players who changed how the game is played.</p>
+        <p class="stat-key"><strong>PPG</strong> Points Per Game &nbsp;·&nbsp; <strong>RPG</strong> Rebounds Per Game &nbsp;·&nbsp; <strong>APG</strong> Assists Per Game</p>
+      </div>
+
+      <div class="card-grid">
+
+        <div class="player-card" style="--tag:#CE1141">
+          <div class="player-top">
+            <div class="player-num">23</div>
+            <div class="player-id"><h3>Michael Jordan</h3><span class="pos">Shooting Guard</span></div>
+          </div>
+          <div class="boxscore">
+            <div><div class="n">30.1</div><div class="l">PPG</div></div>
+            <div><div class="n">6.2</div><div class="l">RPG</div></div>
+            <div><div class="n">5.3</div><div class="l">APG</div></div>
+            <div><div class="n">6×</div><div class="l">TITLES</div></div>
+          </div>
+          <p class="player-note">Six championships with the Chicago Bulls across two three-peats; five-time regular-season MVP.</p>
+        </div>
+
+        <div class="player-card" style="--tag:#552583">
+          <div class="player-top">
+            <div class="player-num">23</div>
+            <div class="player-id"><h3>LeBron James</h3><span class="pos">Forward</span></div>
+          </div>
+          <div class="boxscore">
+            <div><div class="n">27.1</div><div class="l">PPG</div></div>
+            <div><div class="n">7.5</div><div class="l">RPG</div></div>
+            <div><div class="n">7.4</div><div class="l">APG</div></div>
+            <div><div class="n">4×</div><div class="l">TITLES</div></div>
+          </div>
+          <p class="player-note">The NBA's all-time leading scorer, with championships across three different franchises.</p>
+        </div>
+
+        <div class="player-card" style="--tag:#FDB927">
+          <div class="player-top">
+            <div class="player-num">33</div>
+            <div class="player-id"><h3>Kareem Abdul-Jabbar</h3><span class="pos">Center</span></div>
+          </div>
+          <div class="boxscore">
+            <div><div class="n">24.6</div><div class="l">PPG</div></div>
+            <div><div class="n">11.2</div><div class="l">RPG</div></div>
+            <div><div class="n">3.6</div><div class="l">APG</div></div>
+            <div><div class="n">6×</div><div class="l">TITLES</div></div>
+          </div>
+          <p class="player-note">Held the all-time scoring record for nearly 40 years; six-time MVP known for the unstoppable skyhook.</p>
+        </div>
+
+        <div class="player-card" style="--tag:#552583">
+          <div class="player-top">
+            <div class="player-num">32</div>
+            <div class="player-id"><h3>Magic Johnson</h3><span class="pos">Point Guard</span></div>
+          </div>
+          <div class="boxscore">
+            <div><div class="n">19.5</div><div class="l">PPG</div></div>
+            <div><div class="n">7.2</div><div class="l">RPG</div></div>
+            <div><div class="n">11.2</div><div class="l">APG</div></div>
+            <div><div class="n">5×</div><div class="l">TITLES</div></div>
+          </div>
+          <p class="player-note">Redefined the point guard role at 6'9", running the Showtime Lakers' fast break for a decade.</p>
+        </div>
+
+        <div class="player-card" style="--tag:#007A33">
+          <div class="player-top">
+            <div class="player-num">33</div>
+            <div class="player-id"><h3>Larry Bird</h3><span class="pos">Forward</span></div>
+          </div>
+          <div class="boxscore">
+            <div><div class="n">24.3</div><div class="l">PPG</div></div>
+            <div><div class="n">10.0</div><div class="l">RPG</div></div>
+            <div><div class="n">6.3</div><div class="l">APG</div></div>
+            <div><div class="n">3×</div><div class="l">TITLES</div></div>
+          </div>
+          <p class="player-note">Three-time MVP and Jordan-era Bulls' great rival, anchoring the Celtics' 1980s teams.</p>
+        </div>
+
+        <div class="player-card" style="--tag:#1D428A">
+          <div class="player-top">
+            <div class="player-num">30</div>
+            <div class="player-id"><h3>Stephen Curry</h3><span class="pos">Point Guard</span></div>
+          </div>
+          <div class="boxscore">
+            <div><div class="n">24.8</div><div class="l">PPG</div></div>
+            <div><div class="n">4.6</div><div class="l">RPG</div></div>
+            <div><div class="n">6.4</div><div class="l">APG</div></div>
+            <div><div class="n">4×</div><div class="l">TITLES</div></div>
+          </div>
+          <p class="player-note">The NBA's all-time leader in three-pointers made, and the driving force behind a new style of offense.</p>
+        </div>
+
+        <div class="player-card" style="--tag:#552583">
+          <div class="player-top">
+            <div class="player-num">24</div>
+            <div class="player-id"><h3>Kobe Bryant</h3><span class="pos">Shooting Guard</span></div>
+          </div>
+          <div class="boxscore">
+            <div><div class="n">25.0</div><div class="l">PPG</div></div>
+            <div><div class="n">5.2</div><div class="l">RPG</div></div>
+            <div><div class="n">4.7</div><div class="l">APG</div></div>
+            <div><div class="n">5×</div><div class="l">TITLES</div></div>
+          </div>
+          <p class="player-note">An 81-point game and relentless work ethic made "Mamba Mentality" a byword for competitive drive.</p>
+        </div>
+
+        <div class="player-card" style="--tag:#E56020">
+          <div class="player-top">
+            <div class="player-num">34</div>
+            <div class="player-id"><h3>Shaquille O'Neal</h3><span class="pos">Center</span></div>
+          </div>
+          <div class="boxscore">
+            <div><div class="n">23.7</div><div class="l">PPG</div></div>
+            <div><div class="n">10.9</div><div class="l">RPG</div></div>
+            <div><div class="n">2.5</div><div class="l">APG</div></div>
+            <div><div class="n">4×</div><div class="l">TITLES</div></div>
+          </div>
+          <p class="player-note">One of the most physically dominant centers ever; led the Lakers to a three-peat from 2000–2002.</p>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= DYNASTIES ================= -->
+  <section class="block dark" id="dynasties">
+    <div class="wrap">
+      <div class="section-head">
+        <div>
+          <span class="qtr">QTR 2 / 04</span>
+          <h2>Great teams &amp; dynasties</h2>
+        </div>
+        <p>Six eras where one roster didn't just win — it defined how the league played for years after.</p>
+      </div>
+
+      <div class="timeline">
+
+        <div class="era">
+          <div class="era-head">
+            <div class="badge" style="background:#007A33">BOS</div>
+            <div class="era-title">
+              <span class="years">1957 – 1969</span>
+              <h3>Boston Celtics</h3>
+            </div>
+          </div>
+          <p>Built around Bill Russell's defense and rebounding, Boston won 11 championships in 13 seasons — a record of sustained dominance no team has matched since.</p>
+          <div class="stat-line">11 TITLES IN 13 SEASONS</div>
+        </div>
+
+        <div class="era">
+          <div class="era-head">
+            <div class="badge" style="background:#552583">LAL</div>
+            <div class="era-title">
+              <span class="years">1980 – 1988</span>
+              <h3>"Showtime" Lakers</h3>
+            </div>
+          </div>
+          <p>Magic Johnson, Kareem Abdul-Jabbar, and coach Pat Riley turned the fast break into entertainment, winning five titles built on speed and flash.</p>
+          <div class="stat-line">5 TITLES · 8 FINALS APPEARANCES</div>
+        </div>
+
+        <div class="era">
+          <div class="era-head">
+            <div class="badge" style="background:#CE1141">CHI</div>
+            <div class="era-title">
+              <span class="years">1991 – 1998</span>
+              <h3>Chicago Bulls</h3>
+            </div>
+          </div>
+          <p>Michael Jordan and Scottie Pippen won two separate three-peats, punctuated by the 1995–96 team's then-record 72–10 regular season.</p>
+          <div class="stat-line">6 TITLES · 72–10 IN 1995–96</div>
+        </div>
+
+        <div class="era">
+          <div class="era-head">
+            <div class="badge" style="background:#000000; border:1px solid rgba(245,239,227,0.3)">SAS</div>
+            <div class="era-title">
+              <span class="years">1999 – 2014</span>
+              <h3>San Antonio Spurs</h3>
+            </div>
+          </div>
+          <p>Tim Duncan, Tony Parker, and Manu Ginóbili won five titles across three different decades on the back of a famously unselfish, team-first system.</p>
+          <div class="stat-line">5 TITLES ACROSS 3 DECADES</div>
+        </div>
+
+        <div class="era">
+          <div class="era-head">
+            <div class="badge" style="background:#552583">LAL</div>
+            <div class="era-title">
+              <span class="years">2000 – 2002 / 2009 – 2010</span>
+              <h3>Kobe &amp; Shaq / Kobe's Lakers</h3>
+            </div>
+          </div>
+          <p>Shaquille O'Neal and Kobe Bryant three-peated to open the 2000s; Bryant later added two more titles as the team's clear leader.</p>
+          <div class="stat-line">5 TITLES ACROSS TWO ERAS</div>
+        </div>
+
+        <div class="era">
+          <div class="era-head">
+            <div class="badge" style="background:#1D428A">GSW</div>
+            <div class="era-title">
+              <span class="years">2015 – 2022</span>
+              <h3>Golden State Warriors</h3>
+            </div>
+          </div>
+          <p>Stephen Curry's shooting range broke the traditional floor spacing model, powering a 73–9 regular season and four championships in eight years.</p>
+          <div class="stat-line">4 TITLES · 73–9 IN 2015–16</div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= TRAINING ================= -->
+  <section class="block light" id="training">
+    <div class="wrap">
+      <div class="section-head">
+        <div>
+          <span class="qtr">QTR 3 / 04</span>
+          <h2>Tips for beginners</h2>
+        </div>
+        <p>No shortcuts — just the habits every great player built their game on first.</p>
+      </div>
+
+      <div class="drill-grid">
+
+        <div class="drill-card">
+          <svg class="drill-icon" width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="#E2571C" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 2.5 2.5 15 0 18M12 3c-2.5 2.5-2.5 15 0 18" /></svg>
+          <h3>Dribble with both hands</h3>
+          <p>Spend equal time on your weak hand. A player who can only handle the ball with one hand is easy to guard — practice figure-eights and crossovers until both feel natural.</p>
+        </div>
+
+        <div class="drill-card">
+          <svg class="drill-icon" width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="#E2571C" stroke-width="2"><path d="M12 3v14M6 13l6 6 6-6"/><path d="M4 21h16"/></svg>
+          <h3>Shoot close, then step back</h3>
+          <p>Build your form a few feet from the hoop before moving out. A repeatable, balanced shot from close range will hold up much better once you extend to the three-point line.</p>
+        </div>
+
+        <div class="drill-card">
+          <svg class="drill-icon" width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="#E2571C" stroke-width="2"><path d="M12 2l3 7h7l-5.5 4.5 2 7.5L12 17l-6.5 3.5 2-7.5L2 9h7z"/></svg>
+          <h3>Learn to pivot</h3>
+          <p>Once you pick up your dribble, one foot has to stay planted. Practice pivoting in both directions so you can protect the ball and find a pass or shot under pressure.</p>
+        </div>
+
+        <div class="drill-card">
+          <svg class="drill-icon" width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="#E2571C" stroke-width="2"><path d="M4 20c0-4 3.5-7 8-7s8 3 8 7"/><circle cx="12" cy="7" r="4"/></svg>
+          <h3>Get low on defense</h3>
+          <p>A wide, bent-knee stance keeps you quick in both directions. Watch your opponent's chest, not the ball — it doesn't fake as easily as the eyes or shoulders do.</p>
+        </div>
+
+        <div class="drill-card">
+          <svg class="drill-icon" width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="#E2571C" stroke-width="2"><rect x="3" y="4" width="18" height="16" rx="1"/><path d="M8 2v4M16 2v4M3 10h18"/></svg>
+          <h3>Build a free-throw routine</h3>
+          <p>Same number of dribbles, same breath, same release, every single time. Consistency under no pressure is what makes the routine hold up under real pressure.</p>
+        </div>
+
+        <div class="drill-card">
+          <svg class="drill-icon" width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="#E2571C" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg>
+          <h3>Condition, then play</h3>
+          <p>Games are won in the fourth quarter by whoever's legs are still fresh. Add short sprint intervals and footwork drills to your practice, not just shooting reps.</p>
+        </div>
+
+        <div class="drill-card">
+          <svg class="drill-icon" width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="#E2571C" stroke-width="2"><path d="M4 4h16v12H8l-4 4z"/></svg>
+          <h3>Watch and study film</h3>
+          <p>Watch how top players move without the ball, set up their defenders, and read passing lanes. Footwork and spacing translate to any level, even if the athleticism doesn't.</p>
+        </div>
+
+        <div class="drill-card">
+          <svg class="drill-icon" width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="#E2571C" stroke-width="2"><path d="M5 3v18M19 3v18M5 12h14"/></svg>
+          <h3>Play pickup games often</h3>
+          <p>Drills build skill, but only real games teach decision-making under pressure. Get into as many live games as you can — that's where the reps actually stick.</p>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <section class="block dark" id="facts">
+    <div class="wrap">
+      <div class="section-head">
+        <div>
+          <span class="qtr">QTR 4 / 04</span>
+          <h2>Fast facts about the game</h2>
+        </div>
+        <p>A handful of numbers and stories behind how basketball became what it is today.</p>
+      </div>
+
+      <div class="fact-grid">
+
+        <div class="fact-card">
+          <div class="fact-num">1891</div>
+          <p>Dr. James Naismith invented basketball by nailing a peach basket to a gym balcony, needing an indoor game to keep his students active in winter.</p>
+        </div>
+
+        <div class="fact-card">
+          <div class="fact-num">13</div>
+          <p>The original game was played with just 13 rules and two peach-basket hoops — someone had to fetch a ladder to retrieve the ball after every score.</p>
+        </div>
+
+        <div class="fact-card">
+          <div class="fact-num">10ft</div>
+          <p>The rim has sat exactly ten feet off the floor since that very first game, unchanged even as players have grown taller and more athletic.</p>
+        </div>
+
+        <div class="fact-card">
+          <div class="fact-num">24s</div>
+          <p>The shot clock arrived in 1954, forcing teams to shoot within 24 seconds — a fix credited with saving the pro game from stalling out.</p>
+        </div>
+
+        <div class="fact-card">
+          <div class="fact-num">100</div>
+          <p>Wilt Chamberlain scored 100 points in a single game in 1962, a single-game scoring record that still stands more than sixty years later.</p>
+        </div>
+
+        <div class="fact-card">
+          <div class="fact-num">1946</div>
+          <p>The league that became the NBA was founded as the Basketball Association of America, merging with a rival league in 1949 to take its current name.</p>
+        </div>
+
+        <div class="fact-card">
+          <div class="fact-num">1979</div>
+          <p>The three-point line wasn't added to the NBA until the 1979–80 season, after years of use in rival leagues first proved it out.</p>
+        </div>
+
+        <div class="fact-card">
+          <div class="fact-num">5</div>
+          <p>Five players per team take the court at once — a number carried over from Naismith's original rules and never changed since.</p>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    THE HARDWOOD <span class="dot">·</span> A SIMPLE GUIDE TO BASKETBALL
+  </footer>
+
+</body>
+</html>
